@@ -7,7 +7,7 @@ For downloading the source code and setting up the environment, follow the instr
 foo@bar:~/yocto$ repo init -u https://github.com/saurontech/Advantech-LinuxTSU-manifest.git -b main -m ecu-150a1-6.6.36-2.1.0.xml
 foo@bar:~/yocto$ repo sync
 foo@bar:~/yocto$ MACHINE=imx8mq-ecu150a1 DISTRO=fsl-imx-xwayland source ./imx-setup-release.sh -b build
-foo@bar:~/yocto/build$
+foo@bar:~/yocto/build$ bitbake-layers add-layer ../source/meta-ecu-150a1/
 ```
 After the commands, one has not only downloaded the Yocto project for ECU-150-A1, the environment variables, of the operating console, were also setup to operate bitbaker.
 Please also notice, that after the commands, your current position has been changed to the build directory!
@@ -17,6 +17,16 @@ foo@bar:~/yocto$ source ./setup-environment build
 foo@bar:~/yocto/build$
 ```
 ## Build Yocto
+>### Important notice! Bonfigure local.conf based on your host resouce.
+> Building Yocto, with the default configure, is very memory consuming. One might need at least 32 GBytes of RAM.  
+> With insufficient RAM, the building process will fail.
+> Therefore, limiting the maximum parallel processes allowed, migth be a good idea.
+> One may do so by adding the following parameters to **"build/config/local.conf"**
+> ```sh
+> PARALLEL_MAKE = "-j 2"
+> BB_NUMBER_THREADS = "2"
+> ```
+
 In a console that has been setup properly, use the following command to build Linux and the Yocto rootfs
 ```console
 foo@bar:~/yocto/build$ bitbake core-image-minimal
