@@ -85,6 +85,24 @@ clean:
 foo@bar:~/example/USB-4604-BE-linux-driver/driver$ export KERNELDIR=$SDKTARGETSYSROOT/usr/src/kernel
 foo@bar:~/example/USB-4604-BE-linux-driver$ make
 ```
+## Kernel Development
+When one wishes to modify/develop the in-tree kernel source code, the **devtool** command provided by Yocto is a good base to start.
+The following command will prepare a kernel source tree, which is managed by git, under **"build/workspace/sources/linux-imx"**.
+```console
+foo@bar:~/work/build$ devtool modify linux-imx
+foo@bar:~/work/build$ ls ./workspace/sources/
+linux-imx
+```
+After modifying/developing the source code, one can build the modified kernel with one of the following commands
+```console
+foo@bar:~/work/build$ devtool build linux-imx
+```
+If one wishes to modify the default configure, one can use the following command
+```console
+foo@bar:~/work/build$ devtool menuconfig  linux-imx
+```
+Ater one modification is finalized, one can use git to create patch files and place it in **"sources/meta-ecu-150a1/recipes-kernel/linux/files"**.
+
 ## Build Debian/Ubuntu based rootfs
 follow the instructions below to build the rootfs with debootstrap, qemu, and chroot
 ```console
