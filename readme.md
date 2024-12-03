@@ -86,28 +86,28 @@ foo@bar:~/example/USB-4604-BE-linux-driver/driver$ export KERNELDIR=$SDKTARGETSY
 foo@bar:~/example/USB-4604-BE-linux-driver$ make
 ```
 ## Kernel Development
-When one wishes to modify/develop the in-tree kernel source code, the **devtool** command provided by Yocto is a good base to start.
+To modify/develop the in-tree kernel source code, the **devtool** command provided by Yocto is a good base to start.
 The following command will prepare a kernel source tree, which is managed by git, under **"build/workspace/sources/linux-imx"**.
 ```console
 foo@bar:~/yocto/build$ devtool modify linux-imx
 foo@bar:~/yocto/build$ ls ./workspace/sources/
 linux-imx
 ```
-After modifying/developing the source code, one can build the modified kernel with one of the following commands
+To test the modified source code, build the modified kernel with the following command.
 ```console
 foo@bar:~/yocto/build$ devtool build linux-imx
 ```
-If one wishes to modify the default configure, one can use the following command
+To modify the default configure, use the following command.
 ```console
 foo@bar:~/yocto/build$ devtool menuconfig  linux-imx
 ```
-During the process, one should continue to use **"git add, git commit"** to source-control your development.
+During the process, use **"git add, git commit"** to source-control the development.
 To save all the changes controled by git into a new layer, use the following commands
 ```console
 foo@bar:~/yocto/build$ bitbake-layers create-layer ../source/meta-mylayer
 foo@bar:~/yocto/build$ devtools update-recipe -a ../source/meta-mylayer linux-imx
 ```
-After one is finished with the process, use the following proccess to clean the current workspace and add the newly create meta layer to your yocto project.
+After one is finished with the process, use the following proccess to clean the current workspace and add the newly created layer to the yocto project.
 ```console
 foo@bar:~/yocto/build$ devtool reset linux-imx
 foo@bar:~/yocto/build$ bitbake-layers add-layer ../source/meta-mylayer/
