@@ -57,8 +57,8 @@ foo@bar:~/yocto/build$ make modules_prepare -C $SDKTARGETSYSROOT/usr/src/kernel
 
 ```
 ## Build out-of-tree kernel modules
-The following example shows how one can build a out-of-tree kernel module with the Yocto SDK.  
-We use the Advantech USB-4604B USB to serial converter as an example.  
+The following example shows how to build a out-of-tree kernel module with the Yocto SDK.  
+We use the Advantech USB-4604B, a USB to serial converter, as an example.  
 >Notice that this spacific drivers makefile uses **$(KERNELDIR)** to represent the position of the kernel header files; therefore, we use **export KERNELDIR=$SDKTARGETSYSROOT/usr/src/kernel** before we build the driver with **make**.
 
 ```console
