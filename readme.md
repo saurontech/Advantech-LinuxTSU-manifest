@@ -9,16 +9,16 @@ foo@bar:~/yocto$ repo sync
 foo@bar:~/yocto$ MACHINE=imx8mq-ecu150a1 DISTRO=fsl-imx-xwayland source ./imx-setup-release.sh -b build
 foo@bar:~/yocto/build$ bitbake-layers add-layer ../source/meta-ecu-150a1/
 ```
-After the commands, one has not only downloaded the Yocto project for ECU-150-A1, the environment variables, of the operating console, were also setup to operate bitbaker.
+After the commands, not only was the Yocto project for ECU-150-A1 downloaded, the operating console were also setup to operate bitbaker.
 Please also notice, that after the commands, your current position has been changed to the build directory!
-If, in the future, one wishes to setup environment variables of another console; in that spacific console, one should use the command:
+If, in the future, to operate bitbake from another console; in that spacific console, use the command:
 ```console
 foo@bar:~/yocto$ source ./setup-environment build
 foo@bar:~/yocto/build$
 ```
 ## Build Yocto
 >### Important notice! Edit local.conf based on your host resouce.
-> Building Yocto, with the default configure, is very memory consuming. One might need at least 32 GBytes of RAM.  
+> Building Yocto, with the default configure, is very memory consuming. At least 32 GBytes of RAM will be needed.  
 > With insufficient RAM, the building process will fail.
 > Therefore, limiting the maximum parallel processes allowed, migth be a good idea.
 > One may do so by adding the following parameters to **"build/config/local.conf"**
@@ -36,7 +36,7 @@ foo@bar:~/yocto/build$ bitbake core-image-minimal
 - The dtb will be located at: ./build/tmp/deploy/images/imx8mq-ecu150a1/fsl-imx8mq-ecu150a1.dtb
 - The rootfs will be located at: ./build/tmp/deploy/images/imx8mq-ecu150a1/core-image-minimal-imx8mq-ecu150a1.rootfs.tar.gz
 
-If one only wishes to build only the Linux kernel, use the following command:
+To build only the Linux kernel, use the following command instead:
 ```console
 foo@bar:~/yocto/build$ bitbake linux-imx
 ```
@@ -107,7 +107,7 @@ To save all the changes controled by git into a new layer, use the following com
 foo@bar:~/yocto/build$ bitbake-layers create-layer ../source/meta-mylayer
 foo@bar:~/yocto/build$ devtools update-recipe -a ../source/meta-mylayer linux-imx
 ```
-After one is finished with the process, use the following proccess to clean the current workspace and add the newly created layer to the yocto project.
+To finish the process, use the following procedure to clean the current workspace and add the newly created layer to the yocto project.
 ```console
 foo@bar:~/yocto/build$ devtool reset linux-imx
 foo@bar:~/yocto/build$ bitbake-layers add-layer ../source/meta-mylayer/
