@@ -17,7 +17,7 @@ foo@bar:~/yocto$ source ./setup-environment build
 foo@bar:~/yocto/build$
 ```
 ## Build Yocto
->### Important notice! Edit local.conf based on your host resouce.
+>### Important notice! Edit local.conf based on your host resource.
 > Building Yocto, with the default configure, is very memory consuming. At least 32 GBytes of RAM will be needed.  
 > With insufficient RAM, the building process will fail.
 > Therefore, limiting the maximum parallel processes allowed, migth be a good idea.
