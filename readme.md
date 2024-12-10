@@ -7,7 +7,7 @@ For downloading the source code and setting up the environment, follow the instr
 foo@bar:~/yocto$ repo init -u https://github.com/saurontech/Advantech-LinuxTSU-manifest.git -b main -m ecu-150a1-6.6.36-2.1.0.xml
 foo@bar:~/yocto$ repo sync
 foo@bar:~/yocto$ MACHINE=imx8mq-ecu150a1 DISTRO=fsl-imx-xwayland source ./imx-setup-release.sh -b build
-foo@bar:~/yocto/build$ bitbake-layers add-layer ../source/meta-ecu-150a1/
+foo@bar:~/yocto/build$ bitbake-layers add-layer ../sources/meta-ecu-150a1/
 ```
 After the commands, not only was the Yocto project for ECU-150-A1 downloaded, the operating console were also setup to operate bitbaker.
 Please also notice, that after the commands, your current position has been changed to the build directory!
