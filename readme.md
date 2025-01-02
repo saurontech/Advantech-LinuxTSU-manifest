@@ -61,7 +61,7 @@ gpiochip4 - 32 lines:
 root@imx8mq-ecu150a1:~/$ gpioset -t0 PL1=1	//switch on Programmable LED 1
 root@imx8mq-ecu150a1:~/$ gpioset -t0 PL1=0        //switch off Programmable LED 1
 ```
-The following bash-script gives an idea on how the watch dog timer could be enabled and updated.
+The following bash-script gives an idea on how the watchdog timer could be enabled and updated.
 Run the script and terminate it with control-c and the WDT will reset the system.
 ```sh
 #!/bin/bash
