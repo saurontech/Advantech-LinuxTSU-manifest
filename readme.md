@@ -40,6 +40,56 @@ To build only the Linux kernel, use the following command instead:
 ```console
 foo@bar:~/yocto/build$ bitbake linux-imx
 ```
+## Programmable LEDs and Watch Dog Timer
+The Programmable LEDs and Watch Dog Timer are accessed via GPIO; therefore, it should be accessed via the libGPIOD API.
+```console
+root@imx8mq-ecu150a1:~/$ gpioinfo
+...
+gpiochip3 - 32 lines:
+        ...
+        line   11:    "WDT_EN"       unused   input  active-high
+        ...
+        line   20:       "WDT"       unused   input  active-high
+gpiochip4 - 32 lines:
+        line   0:      unnamed       unused   input  active-high
+        line   1:      unnamed       unused   input  active-high
+        line   2:      unnamed       unused   input  active-high
+        line   3:        "PL1"       unused   input  active-high
+        line   4:        "PL2"       unused   input  active-high
+        line   5:        "PL3"       unused   input  active-high
+...
+root@imx8mq-ecu150a1:~/$ gpioset -t0 PL1=1	//switch on Programmable LED 1
+root@imx8mq-ecu150a1:~/$ gpioset -t0 PL1=0        //switch off Programmable LED 1
+```
+The following bash-script gives an idea on how the watch dog timer could be enabled and updated.
+Run the script and terminate it with control-c and the WDT will reset the system.
+```sh
+#!/bin/bash
+i=0
+for j in {0..5}
+do
+	gpioset -t0 WDT=$i
+	if [ $i -eq 0 ]; then 
+		i=1
+	else
+		i=0
+	fi
+	sleep 0.3
+done
+#gpioset -t0 -c gpiochip3 11=0
+gpioset -t0 WDT_EN=0 
+while true
+do
+	gpioset -t0 WDT=$i
+	if [ $i -eq 0 ]; then 
+		i=1
+	else
+		i=0
+	fi
+	sleep 0.3
+done
+```
+
 ## Create SDK for Yocto
 ```console
 foo@bar:~/yocto/build$ bitbake -c populate_sdk core-image-minimal
