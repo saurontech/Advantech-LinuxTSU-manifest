@@ -40,8 +40,8 @@ To build only the Linux kernel, use the following command instead:
 ```console
 foo@bar:~/yocto/build$ bitbake linux-imx
 ```
-## Programmable LEDs and Watch Dog Timer
-The Programmable LEDs and Watch Dog Timer are accessed via GPIO; therefore, it should be accessed via the libGPIOD API.
+## Programmable LEDs and Watchdog Timer
+The Programmable LEDs and Watch Dog Timer are accessed via GPIO; therefore, it should be accessed via the standard libGPIOD API.
 ```console
 root@imx8mq-ecu150a1:~/$ gpioinfo
 ...
@@ -66,6 +66,9 @@ Run the script and terminate it with control-c and the WDT will reset the system
 ```sh
 #!/bin/bash
 i=0
+# clear the wdt a few times before enabling it.
+# It has left alone for too long,
+# enabling it right away will reset the system immediately.
 for j in {0..5}
 do
 	gpioset -t0 WDT=$i
@@ -76,8 +79,8 @@ do
 	fi
 	sleep 0.3
 done
-#gpioset -t0 -c gpiochip3 11=0
-gpioset -t0 WDT_EN=0 
+# enable the wdt
+gpioset -t0 WDT_EN=0
 while true
 do
 	gpioset -t0 WDT=$i
