@@ -226,8 +226,9 @@ else
 fi
 
 ```
-This following commands will slightly differe between Debian 12 and Ubuntu 24.04; therefore, we seperate the instuctions into two subsections.  
-Follow the instructions based on your target distro.
+The following commands will slightly differe between Debian 12 and Ubuntu 24.04; therefore, we seperate the instuctions into two subsections.  
+Choose the instructions based on your target distro.
+The "deb" files mentioned below could be found in "yocto/build/tmp/deploy/deb/all/".
 ### Debian 12 
 ```console
 foo@bar:~/work$ sudo debootstrap --arch arm64 bookworm my_rootfs http://deb.debian.org/debian
