@@ -230,7 +230,7 @@ This following commands will slightly differe between Debian 12 and Ubuntu 24.04
 Follow the instructions based on your target distro.
 ### Debian 12 
 ```console
-foo@bar:~/work$ sudo debootstrap --arch arm64 bookworm debian_rootfs http://deb.debian.org/debian
+foo@bar:~/work$ sudo debootstrap --arch arm64 bookworm my_rootfs http://deb.debian.org/debian
 foo@bar:~/work$ sudo tar xvf ./modules-imx8mq-ecu150a1.tgz -C ./my_rootfs/usr/
 foo@bar:~/work$ cp firmware-imx-sdma-imx7d*.deb ./my_rootfs/tmp/
 foo@bar:~/work$ cp linux-firmware-rtl*.deb ./my_rootfs/tmp/
