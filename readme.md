@@ -244,7 +244,6 @@ imx@bar:~/$ cd /tmp  && dpkg -i *.deb
 ### Ubuntu 24.04
 ```console
 foo@bar:~/work$ sudo debootstrap --arch arm64 noble my_rootfs http://tw.archive.ubuntu.com/ubuntu/
-foo@bar:~/work$ ./ch-rootfs.sh -m ./my_rootfs/
 foo@bar:~/work$ sudo tar xvf ./modules-imx8mq-ecu150a1.tgz -C ./my_rootfs/usr/
 foo@bar:~/work$ cp firmware-imx-sdma-imx7d*.deb ./my_rootfs/tmp/
 foo@bar:~/work$ cp linux-firmware-rtl*.deb ./my_rootfs/tmp/
