@@ -235,6 +235,7 @@ foo@bar:~/work$ sudo debootstrap --arch arm64 bookworm my_rootfs http://deb.debi
 foo@bar:~/work$ sudo tar xvf ./modules-imx8mq-ecu150a1.tgz -C ./my_rootfs/usr/
 foo@bar:~/work$ cp firmware-imx-sdma-imx7d*.deb ./my_rootfs/tmp/
 foo@bar:~/work$ cp linux-firmware-rtl*.deb ./my_rootfs/tmp/
+foo@bar:~/work$ cp linux-firmware-whence-license_*.deb ./my_rootfs/tmp/
 foo@bar:~/work$ ./ch-rootfs.sh -m ./my_rootfs/
 imx@bar:~/$ apt-get update
 imx@bar:~/$ apt-get install sudo ssh net-tools iputils-ping rsyslog bash-completion htop resolvconf dialog gpiod vim locales netplan.io systemd-timesyncd systemd-resolved
@@ -247,6 +248,7 @@ foo@bar:~/work$ sudo debootstrap --arch arm64 noble my_rootfs http://tw.archive.
 foo@bar:~/work$ sudo tar xvf ./modules-imx8mq-ecu150a1.tgz -C ./my_rootfs/usr/
 foo@bar:~/work$ cp firmware-imx-sdma-imx7d*.deb ./my_rootfs/tmp/
 foo@bar:~/work$ cp linux-firmware-rtl*.deb ./my_rootfs/tmp/
+foo@bar:~/work$ cp linux-firmware-whence-license_*.deb ./my_rootfs/tmp/
 foo@bar:~/work$ ./ch-rootfs.sh -m ./my_rootfs/
 root@imx:~/$ apt-get update
 root@imx:~/$ apt install sudo ssh net-tools iputils-ping rsyslog bash-completion htop vim nano netplan.io software-properties-common
