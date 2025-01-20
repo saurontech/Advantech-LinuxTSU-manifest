@@ -258,6 +258,7 @@ root@imx:~/$ cd /tmp  && dpkg -i *.deb
 The difference between Debian 12/Ubuntu 24.04 stops here.  
 The following instructions can be shared between two target distros.
 ```console
+root@imx:~/$ ln -s /dev/null /etc/systemd/network/99-default.link
 root@imx:~/$ echo 'imx8mq-ecu150a1' > /etc/hostname
 root@imx:~/$ cat <<EOF >> /etc/udev/rules.d/localextra.rules
 # Microchip Technology USB2740 Hub
