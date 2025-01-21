@@ -237,10 +237,11 @@ foo@bar:~/work$ cp firmware-imx-sdma-imx7d*.deb ./my_rootfs/tmp/
 foo@bar:~/work$ cp linux-firmware-rtl*.deb ./my_rootfs/tmp/
 foo@bar:~/work$ cp linux-firmware-whence-license_*.deb ./my_rootfs/tmp/
 foo@bar:~/work$ ./ch-rootfs.sh -m ./my_rootfs/
-imx@bar:~/$ apt-get update
-imx@bar:~/$ apt-get install sudo ssh net-tools iputils-ping rsyslog bash-completion htop resolvconf dialog gpiod vim locales netplan.io systemd-timesyncd systemd-resolved
-imx@bar:~/$ dpkg-reconfigure locales
-imx@bar:~/$ cd /tmp  && dpkg -i *.deb
+root@imx:~/$ apt-get update
+root@imx:~/$ apt-get install sudo ssh net-tools iputils-ping rsyslog bash-completion htop resolvconf dialog gpiod vim locales netplan.io systemd-timesyncd systemd-resolved
+root@imx:~/$ dpkg-reconfigure locales
+root@imx:~/$ cd /tmp  && dpkg -i *.deb
+root@imx:~/$ rm /tmp/*
 ```
 ### Ubuntu 24.04
 ```console
@@ -251,9 +252,15 @@ foo@bar:~/work$ cp linux-firmware-rtl*.deb ./my_rootfs/tmp/
 foo@bar:~/work$ cp linux-firmware-whence-license_*.deb ./my_rootfs/tmp/
 foo@bar:~/work$ ./ch-rootfs.sh -m ./my_rootfs/
 root@imx:~/$ apt-get update
-root@imx:~/$ apt install sudo ssh net-tools iputils-ping rsyslog bash-completion htop vim nano netplan.io software-properties-common
 root@imx:~/$ add-apt-repository universe
+root@imx:~/$ apt install sudo ssh net-tools iputils-ping rsyslog bash-completion htop vim nano netplan.io software-properties-common gpiod
 root@imx:~/$ cd /tmp  && dpkg -i *.deb
+root@imx:~/$ rm /tmp/*
+```
+On Ubunt, root login is disabled by default; therefore it is a good idea to added a user with sudo privilage.
+```console
+root@imx:~/$ adduser admin
+root@imx:~/$ usermod -aG sudo admin
 ```
 The difference between Debian 12/Ubuntu 24.04 stops here.  
 The following instructions can be shared between two target distros.
