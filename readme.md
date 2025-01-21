@@ -280,7 +280,7 @@ root@imx:~/$ systemctl enable systemd-resolved.service
 root@imx:~/$ systemctl enable systemd-timesyncd.service
 root@imx:~/$ nano /etc/profile.d/custom.sh
 root@imx:~/$ exit
-foo@bar:~/work$
+foo@bar:~/work$ ./ch-rootfs.sh -z ./my_rootfs/
 ```
 The constent of custom.sh is listed as below:
 ```sh
