@@ -257,7 +257,7 @@ root@imx:~/$ apt install sudo ssh net-tools iputils-ping rsyslog bash-completion
 root@imx:~/$ cd /tmp  && dpkg -i *.deb
 root@imx:~/$ rm /tmp/*
 ```
-On Ubunt, root login is disabled by default; therefore it is a good idea to added a user with sudo privilage.
+On Ubuntu, root login is disabled by default; therefore it is a good idea to added a user with sudo privilage.
 ```console
 root@imx:~/$ adduser admin
 root@imx:~/$ usermod -aG sudo admin
