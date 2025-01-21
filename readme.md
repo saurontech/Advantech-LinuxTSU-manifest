@@ -334,3 +334,130 @@ resize() {
 fi
 
 ```
+## Create Secure Boot Images
+To create secure boot images, the first step would be setting up the CST tool, provided by NXP.  
+
+1. Download the Code-Singing-Tool From NXP:https://www.nxp.com/webapp/Download?colCode=IMX_CST_TOOL_NEW&appType=license  
+2. Create fuse.bin and table.bin
+```console
+foo@bar:~/Download$ cd ./cst-3.4.0/keys
+foo@bar:~/Download/cst-3.4.0/keys$ vi serial
+12345678
+foo@bar:~/Download/cst-3.4.0/keys$ vi key_pass.txt 
+my_pass_phrase
+my_pass_phrase
+foo@bar:~/Download/cst-3.4.0/keys$ ./hab4_pki_tree.sh
+...
+Do you want to use an existing CA key (y/n)?: n
+
+Key type options (confirm targeted device supports desired key type):
+Select the key type (possible values: rsa, rsa-pss, ecc)?: rsa
+Enter key length in bits for PKI tree: 2048
+Enter PKI tree duration (years): 10
+How many Super Root Keys should be generated? 1
+Do you want the SRK certificates to have the CA flag set? (y/n)?: y
+...
+foo@bar:~/Download/cst-3.4.0/keys$ ls SRK*
+SRK1_sha256_2048_65537_v3_ca_key.der  SRK1_sha256_2048_65537_v3_ca_key.pem
+
+foo@bar:~/Download/cst-3.4.0/keys$ cd ../crts/
+foo@bar:~/Download/cst-3.4.0/crts$ ../linux64/bin/srktool -h 4 -t SRK_1_2_3_4_table.bin \
+    -e SRK_1_2_3_4_fuse.bin -d sha256 -c \
+    ./SRK1_sha256_2048_65537_v3_ca_crt.pem, \
+    ./SRK2_sha256_2048_65537_v3_ca_crt.pem, \
+    ./SRK3_sha256_2048_65537_v3_ca_crt.pem, \
+    ./SRK4_sha256_2048_65537_v3_ca_crt.pem -f 1
+Number of certificates    = 1
+SRK table binary filename = SRK_1_2_3_4_table.bin
+SRK Fuse binary filename  = SRK_1_2_3_4_fuse.bin
+SRK Fuse binary dump:
+SRK HASH[0] = 0x3D06A4A9
+SRK HASH[1] = 0x4BC55D12
+SRK HASH[2] = 0xA5F45E7F
+SRK HASH[3] = 0x1F1F68FC
+SRK HASH[4] = 0x3B9B4AE8
+SRK HASH[5] = 0xFC658293
+SRK HASH[6] = 0x40A706C9
+SRK HASH[7] = 0x94A9139E
+
+foo@bar:~/Download/cst-3.4.0/keys$ ls SRK_*
+SRK_1_2_3_4_fuse.bin  SRK_1_2_3_4_table.bin
+```
+3. Add & setup the "security reference design" meta-layer to the yocto project.
+```console
+foo@bar:~/yocto$ source ./setup-environment build
+foo@bar:~/yocto/build$ bitbake-layers add-layer ../sources/meta-nxp-reference-design/meta-secure-boot
+foo@bar:~/yocto/build$ vim ./conf/local.conf     #add    CST_PATH = "<absolute path to cst-3.4.0 folder>"  
+```
+4. Use one of the following commands to build the desired signed image:
+```console
+foo@bar:~/yocto/build$ bitbake core-image-minimal-secure-boot
+foo@bar:~/yocto/build$ bitbake imx-boot-signature                # for building a signed uboot only
+foo@bar:~/yocto/build$ bitbake linux-imx-signature               # for building a signed linux only
+```
+## Program eFUSE
+In the "cst-3.4.0/keys" folder, extract the values needed to program the eFUSE.
+```console
+foo@bar:~/Download/cst-3.4.0/keys$ hexdump -e '/4 "0x"' -e '/4 "%X""\n"' SRK_1_2_3_4_fuse.bin
+0x9A842534
+0xB0491AB4
+0xD5B6A07B
+0xFD92DCE7
+0xC10DC87C
+0xD8BD04A9
+0x704E9FE4
+0x9B025359
+```
+On a ECU device running the signed uboot, check the HAB status:
+```console
+u-boot=> hab_status
+Secure boot disabled
+HAB Configuration: 0xf0, HAB State:
+0x66
+No HAB Events Found!
+```
+> ### Warning! for each CPU, the fuse can only be programmed once
+Burn the eFUSE with the values extracted from the previous command:
+```console
+u-boot=> fuse prog 6 0 0x9A842534
+u-boot=> fuse prog 6 1 0xB0491AB4
+u-boot=> fuse prog 6 2 0xD5B6A07B
+u-boot=> fuse prog 6 3 0xFD92DCE7
+u-boot=> fuse prog 7 0 0xC10DC87C
+u-boot=> fuse prog 7 1 0xD8BD04A9
+u-boot=> fuse prog 7 2 0x704E9FE4
+u-boot=> fuse prog 7 3 0x9B025359
+```
+Verify the new eFUSE values
+``` console
+u-boot=> fuse read 6 0 4
+Reading bank 6:
+Word 0x00000000: 9a842534 b0491ab4 d5b6a07b fd92dce7
+u-boot=> fuse read 7 0 4
+Reading bank 7:
+Word 0x00000000: c10dc87c d8bd04a9 704e9fe4 9b025359
+```
+## Verify the signature included in flash.bin
+The next step is to verify that the signatures included in flash.bin image is
+successfully processed without errors. HAB generates events when processing
+the commands if it encounters issues.
+
+The hab_status U-Boot command call the hab_report_event() and hab_status()
+HAB API functions to verify the processor security configuration and status.
+This command displays any events that were generated during the process.
+```console
+u-boot=> hab_status
+Secure boot disabled
+HAB Configuration: 0xf0, HAB State: 0x66
+```
+## Closing the device
+
+After the device successfully boots a signed image without generating any HAB
+events, it is safe to close the device. This is the last step in the HAB
+process, and is achieved by programming the SEC_CONFIG[1] fuse bit.
+
+Once the fuse is programmed, the chip does not load an image that has not been
+signed using the correct PKI tree.
+```console
+u-boot=> fuse prog 1 3 0x2000000
+```
