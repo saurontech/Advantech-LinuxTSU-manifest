@@ -428,15 +428,6 @@ u-boot=> fuse prog 7 1 0xD8BD04A9
 u-boot=> fuse prog 7 2 0x704E9FE4
 u-boot=> fuse prog 7 3 0x9B025359
 ```
-Verify the new eFUSE values
-``` console
-u-boot=> fuse read 6 0 4
-Reading bank 6:
-Word 0x00000000: 9a842534 b0491ab4 d5b6a07b fd92dce7
-u-boot=> fuse read 7 0 4
-Reading bank 7:
-Word 0x00000000: c10dc87c d8bd04a9 704e9fe4 9b025359
-```
 ## Verify the signature included in flash.bin
 The next step is to verify that the signatures included in flash.bin image is
 successfully processed without errors. HAB generates events when processing
