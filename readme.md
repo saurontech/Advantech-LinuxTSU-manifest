@@ -17,7 +17,8 @@ foo@bar:~/yocto$ source ./setup-environment build
 foo@bar:~/yocto/build$
 ```
 ## Build Yocto
->### Important notice! Edit local.conf based on your host resource.
+>### Important notice!
+> Edit __local.conf__ based on your host resource.  
 > Building Yocto, with the default configure, is very memory consuming. At least 32 GBytes of RAM will be needed.  
 > With insufficient RAM, the building process will fail.
 > Therefore, limiting the maximum parallel processes allowed, migth be a good idea.
@@ -32,13 +33,43 @@ In a console that has been setup properly, use the following command to build Li
 foo@bar:~/yocto/build$ bitbake core-image-minimal
 
 ```
-- The Linux kernel will be located at : ./build/tmp/deploy/images/imx8mq-ecu150a1/Image
-- The dtb will be located at: ./build/tmp/deploy/images/imx8mq-ecu150a1/fsl-imx8mq-ecu150a1.dtb
-- The rootfs will be located at: ./build/tmp/deploy/images/imx8mq-ecu150a1/core-image-minimal-imx8mq-ecu150a1.rootfs.tar.gz
+- The __Linux kernel__ will be located at : __./build/tmp/deploy/images/imx8mq-ecu150a1/Image__
+- The __dtb__ will be located at: __./build/tmp/deploy/images/imx8mq-ecu150a1/fsl-imx8mq-ecu150a1.dtb__
+- The __rootfs__ will be located at: __./build/tmp/deploy/images/imx8mq-ecu150a1/core-image-minimal-imx8mq-ecu150a1.rootfs.tar.gz__
 
 To build only the Linux kernel, use the following command instead:
 ```console
 foo@bar:~/yocto/build$ bitbake linux-imx
+```
+## Deploy the Yocto Image
+The easiest way to delpy the yocto image is to dump the wic file to a SD card.  
+To create a bootable SD card, use the following commands:
+>## Important notes about this procedure
+>  1. The wic image could be found at ./build/tmp/deploy/images/imx7mq-ecu150a1/core-image-minimal-imx8mq-ecu150a1.rootfs-*.wic.gz
+>  2. __BEWARE!!!__ The following example assumes that the __SD card__ was located as **/dev/sdb**, change the location accordingly. otherwise, /dev/sdb would be ruined.
+>  3. To deploy the image to the on board EMMC, copy the wic.gz file to the __root/__ partition on the SD, boot from SD and follow the same commands with the following parameters swapped out:
+>        1. __/dev/sdb__ swapped to __/dev/mmcblk0__
+>        2. __/dev/sdb2__ swapped to __/dev/mmcblk0p2__
+>  5. Use the on board hardware switch __SW2__ to select between the boot devices.
+
+```console
+foo@bar:~/yocto/build/tmp/deploy/images/imx8mq-ecu150a1/$ gunzip -c ./core-image-minimal-imx8mq-ecu150a1.rootfs-*.wic.gz | sudo dd of=/dev/sdb bs=1M iflag=fullblock oflag=direct conv=fsync
+1181+1 records in
+1181+1 records out
+1238877184 bytes (1.2 GB, 1.2 GiB) copied, 73.1945 s, 16.9 MB/s
+foo@bar:~/yocto/build/tmp/deploy/images/imx8mq-ecu150a1$ sudo parted -s -a opt /dev/sdb "resizepart 2 100%"
+foo@bar:~/yocto/build/tmp/deploy/images/imx8mq-ecu150a1$ sudo e2fsck -f /dev/sdb2 
+e2fsck 1.47.0 (5-Feb-2023)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+root: 16790/107296 files (0.1% non-contiguous), 126901/214396 blocks
+foo@bar:~/yocto/build/tmp/deploy/images/imx8mq-ecu150a1$ sudo resize2fs /dev/sdb2
+resize2fs 1.47.0 (5-Feb-2023)
+Resizing the filesystem on /dev/sdb2 to 7545600 (4k) blocks.
+The filesystem on /dev/sdb2 is now 7545600 (4k) blocks long.
 ```
 ## Programmable LEDs and Watchdog Timer
 The Programmable LEDs and Watch Dog Timer are accessed via GPIO; therefore, it should be accessed via the standard libGPIOD API.
