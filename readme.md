@@ -4,7 +4,7 @@ The goal of this project is to release opensource Linux source code that runs on
 ## Download the Yocto Linux for ECU-150-A1 and setup environment variables
 For downloading the source code and setting up the environment, follow the instructions below:
 ```console
-foo@bar:~/yocto$ repo init -u https://github.com/saurontech/Advantech-LinuxTSU-manifest.git -b main -m ecu-150a1-6.6.36-2.1.0.xml
+foo@bar:~/yocto$ repo init -u https://github.com/saurontech/Advantech-LinuxTSU-manifest.git -b main -m ecu-150a1-6.6.52-2.2.0.xml
 foo@bar:~/yocto$ repo sync
 foo@bar:~/yocto$ MACHINE=imx8mq-ecu150a1 DISTRO=fsl-imx-xwayland source ./imx-setup-release.sh -b build
 foo@bar:~/yocto/build$ bitbake-layers add-layer ../sources/meta-ecu-150a1/
