@@ -1,7 +1,7 @@
 # Manifest of the Advantech Linux TSU Yocto project
 The goal of this project is to release opensource Linux source code that runs on Advantech Hardware
 
-## Download the Yocto Linux for ECU-150-A1 and setup environment variables
+## Download the Yocto Linux for ECU-150-12A1 & ECU-150-12A1U and setup environment variables
 For downloading the source code and setting up the environment, follow the instructions below:
 ```console
 foo@bar:~/yocto$ repo init -u https://github.com/saurontech/Advantech-LinuxTSU-manifest.git -b main -m ecu-150a1-6.6.52-2.2.0.xml
