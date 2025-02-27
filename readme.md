@@ -17,7 +17,13 @@ foo@bar:~/yocto$ source ./setup-environment build
 foo@bar:~/yocto/build$
 ```
 ## Build Yocto
->### Important notice!
+>[!NOTE]
+> On Ubuntu 24.04 hosts, AppAromor settings needs to be adjusted before building Yocto.
+>```console
+> foo@bar:~/$ sudo sh -c 'echo 0 > /proc/sys/kernel/apparmor_restrict_unprivileged_userns'
+>```
+
+>[!TIP]
 > Edit __local.conf__ based on your host resource.  
 > Building Yocto, with the default configure, is very memory consuming. At least 32 GBytes of RAM will be needed.  
 > With insufficient RAM, the building process will fail.
@@ -44,13 +50,15 @@ foo@bar:~/yocto/build$ bitbake linux-imx
 ## Deploy the Yocto Image
 The easiest way to delpy the yocto image is to dump the wic file to a SD card.  
 To create a bootable SD card, use the following commands:
->## Important notes about this procedure
+> [!CAUTION] 
+>  __BEWARE!!!__ The following example assumes that the __SD card__ was located as **/dev/sdb**, change the location accordingly. otherwise, /dev/sdb would be ruined.
+
+> [!NOTE]
 >  1. The wic image could be found at ./build/tmp/deploy/images/imx7mq-ecu150a1/core-image-minimal-imx8mq-ecu150a1.rootfs-*.wic.gz
->  2. __BEWARE!!!__ The following example assumes that the __SD card__ was located as **/dev/sdb**, change the location accordingly. otherwise, /dev/sdb would be ruined.
->  3. To deploy the image to the on board EMMC, copy the wic.gz file to the __root/__ partition on the SD, boot from SD and follow the same commands with the following parameters swapped out:
+>  2. To deploy the image to the on board EMMC, copy the wic.gz file to the __root/__ partition on the SD, boot from SD and follow the same commands with the following parameters swapped out:
 >        1. __/dev/sdb__ swapped to __/dev/mmcblk0__
 >        2. __/dev/sdb2__ swapped to __/dev/mmcblk0p2__
->  5. Use the on board hardware switch __SW2__ to select between the boot devices.
+>  3. Use the on board hardware switch __SW2__ to select between the boot devices.
 
 ```console
 foo@bar:~/yocto/build/tmp/deploy/images/imx8mq-ecu150a1/$ gunzip -c ./core-image-minimal-imx8mq-ecu150a1.rootfs-*.wic.gz | sudo dd of=/dev/sdb bs=1M iflag=fullblock oflag=direct conv=fsync
@@ -143,6 +151,7 @@ foo@bar:~/yocto/build$ make modules_prepare -C $SDKTARGETSYSROOT/usr/src/kernel
 ## Build out-of-tree kernel modules
 The following example shows how to build a out-of-tree kernel module with the Yocto SDK.  
 We use the Advantech USB-4604B, a USB to serial converter, as an example.  
+>[!NOTE]
 >Notice that this spacific drivers makefile uses **$(KERNELDIR)** to represent the position of the kernel header files; therefore, we use **export KERNELDIR=$SDKTARGETSYSROOT/usr/src/kernel** before we build the driver with **make**.
 
 ```console
@@ -257,9 +266,10 @@ else
 fi
 
 ```
-The following commands will slightly differe between Debian 12 and Ubuntu 24.04; therefore, we seperate the instuctions into two subsections.  
-Choose the instructions based on your target distro.
-The "deb" files mentioned below could be found in "yocto/build/tmp/deploy/deb/all/".
+> [!NOTE]
+> The following commands will slightly differe between Debian 12 and Ubuntu 24.04; therefore, we seperate the instuctions into two subsections.  
+> Choose the instructions based on your target distro.
+> The "deb" files mentioned below could be found in "yocto/build/tmp/deploy/deb/all/".
 ### Debian 12 
 ```console
 foo@bar:~/work$ sudo debootstrap --arch arm64 bookworm my_rootfs http://deb.debian.org/debian
@@ -293,7 +303,8 @@ On Ubuntu, root login is disabled by default; therefore it is a good idea to add
 root@imx:~/$ adduser admin
 root@imx:~/$ usermod -aG sudo admin
 ```
-The difference between Debian 12/Ubuntu 24.04 stops here.  
+> [!NOTE]
+> The difference between Debian 12/Ubuntu 24.04 stops here.  
 The following instructions can be shared between two target distros.
 ```console
 root@imx:~/$ ln -s /dev/null /etc/systemd/network/99-default.link
