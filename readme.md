@@ -203,7 +203,7 @@ foo@bar:~/yocto/build$ devtools update-recipe -a ../sources/meta-mylayer linux-i
 To finish the process, use the following procedure to clean the current workspace and add the newly created layer to the yocto project.
 ```console
 foo@bar:~/yocto/build$ devtool reset linux-imx
-foo@bar:~/yocto/build$ bitbake-layers add-layer ../source/meta-mylayer/
+foo@bar:~/yocto/build$ bitbake-layers add-layer ../sources/meta-mylayer/
 foo@bar:~/yocto/build$ bitbake linux-imx
 ```
 
