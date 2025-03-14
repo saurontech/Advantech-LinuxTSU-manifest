@@ -198,7 +198,7 @@ During the process, use **"git add, git commit"** to source-control the developm
 To save all the changes controled by git into a new layer, use the following commands
 ```console
 foo@bar:~/yocto/build$ bitbake-layers create-layer ../sources/meta-mylayer
-foo@bar:~/yocto/build$ devtools update-recipe -a ../sources/meta-mylayer linux-imx
+foo@bar:~/yocto/build$ devtool update-recipe -a ../sources/meta-mylayer linux-imx
 ```
 To finish the process, use the following procedure to clean the current workspace and add the newly created layer to the yocto project.
 ```console
