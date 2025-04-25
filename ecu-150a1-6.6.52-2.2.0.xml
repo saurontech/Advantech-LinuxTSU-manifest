@@ -42,5 +42,5 @@
   <project name="meta-nxp-connectivity" remote="imx" path="sources/meta-nxp-connectivity" revision="refs/tags/rel_imx_6.6.52_2.2.0" upstream="imx_matter_2024_q3-post"/>
   <project name="meta-nxp-demo-experience" remote="imx-support" path="sources/meta-nxp-demo-experience" revision="refs/tags/rel_imx_6.6.52_2.2.0" upstream="scarthgap-6.6.52-2.2.0"/>
   <project name="meta-nxp-security-reference-design" remote="imx-support" path="sources/meta-nxp-security-reference-design" revision="scarthgap-6.6.23-2.0.0" />
-  <project name="meta-ecu-150a1" remote="adv-tsu" path="sources/meta-ecu-150a1" upstrea="scarthgap"/>
+  <project name="meta-ecu-150a1" remote="adv-tsu" path="sources/meta-ecu-150a1" upstream="scarthgap"/>
 </manifest>
