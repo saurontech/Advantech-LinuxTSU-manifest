@@ -135,7 +135,7 @@ done
 ## Create SDK for Yocto
 ```console
 foo@bar:~/yocto/build$ bitbake -c populate_sdk core-image-minimal
-foo@bar:~/yocto/build$ sudo sh ./tmp/deploy/sdk/fsl-imx-xwayland-glibc-x86_64-core-image-minimal-armv8a-imx8mq-ecu150a1-toolchain-6.6-scarthgap.sh
+foo@bar:~/yocto/build$ sh ./tmp/deploy/sdk/fsl-imx-xwayland-glibc-x86_64-core-image-minimal-armv8a-imx8mq-ecu150a1-toolchain-6.6-scarthgap.sh
 NXP i.MX Release Distro SDK installer version 6.6-scarthgap
 ===========================================================
 Enter target directory for SDK (default: /opt/fsl-imx-xwayland/6.6-scarthgap): ~/my_sdk
@@ -145,6 +145,7 @@ Setting it up...done
 SDK has been successfully set up and is ready to be used.
 Each time you wish to use the SDK in a new shell session, you need to source the environment setup script e.g.
  $ . /home/foo/my_sdk/environment-setup-armv8a-poky-linux
+foo@bar:~/yocto/build$ . /home/foo/my_sdk/environment-setup-armv8a-poky-linux
 foo@bar:~/yocto/build$ make modules_prepare -C $SDKTARGETSYSROOT/usr/src/kernel
 
 ```
