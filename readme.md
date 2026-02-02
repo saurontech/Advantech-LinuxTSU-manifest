@@ -377,6 +377,56 @@ resize() {
 fi
 
 ```
+
+## Enable RAUC Function
+RAUC is a Linux-level OTA update system that provides A/B partition switching and rollback mechanisms.
+
+### Add meta-rauc Layer
+```console
+foo@bar:~/yocto/sources$ git clone https://github.com/rauc/meta-rauc.git
+foo@bar:~/yocto/sources$ cd meta-rauc
+foo@bar:~/yocto/sources/meta-rauc$ git checkout scarthgap
+foo@bar:~/yocto/build$ bitbake-layers add-layer ../sources/meta-rauc
+```
+
+### Generate RAUC Certificates
+RAUC requires X.509 certificates to sign and verify Bundles:
+```console
+foo@bar:~/yocto/sources/meta-rauc$ ./scripts/openssl-ca.sh
+```
+Generated files:
+- `ca.cert.pem` → Copy to `meta-ecu-150a1/recipes-core/rauc/files/`
+- `ca.key.pem` → Keep secure (do not add to version control)
+- `development-1.cert.pem` → Copy to `meta-ecu-150a1/recipes-core/bundles/files/`
+- `development-1.key.pem` → Copy to `meta-ecu-150a1/recipes-core/bundles/files/`
+
+### Enable RAUC and Build
+Edit `conf/local.conf` to enable RAUC:
+```console
+foo@bar:~/yocto/build$ vim ./conf/local.conf    # add RAUC_ENABLED = "1"
+foo@bar:~/yocto/build$ bitbake core-image-minimal
+```
+
+### Build RAUC Bundle (OTA Update Package)
+```console
+foo@bar:~/yocto/build$ bitbake update-bundle
+foo@bar:~/yocto/build$ ls tmp/deploy/images/imx8mq-ecu150a1/*.raucb
+```
+
+>[!Note]
+>Make sure the parameter `RAUC_SLOT_rootfs` in `meta-ecu-150a1/recipes-core/bundles/update-bundle.bb` matches the rootfs image name. e.g. for `core-image-minimal-secure-boot-imx8mq-ecu150a1.rootfs.tar.gz`, set `RAUC_SLOT_rootfs = "core-image-minimal-secure-boot"`.
+
+### Using RAUC on the Development Board
+Check RAUC status:
+```console
+root@imx8mq-ecu150a1:~$ rauc status
+```
+Install OTA update:
+```console
+root@imx8mq-ecu150a1:~$ rauc install /tmp/update-bundle-*.raucb
+root@imx8mq-ecu150a1:~$ reboot
+```
+
 ## Create Secure Boot Images
 To create secure boot images, the first step would be setting up the CST tool, provided by NXP.  
 
@@ -426,13 +476,19 @@ SRK HASH[7] = 0x94A9139E
 foo@bar:~/Download/cst-3.4.0/keys$ ls SRK_*
 SRK_1_2_3_4_fuse.bin  SRK_1_2_3_4_table.bin
 ```
-3. Add & setup the "security reference design" meta-layer to the yocto project.
+
+3. Make core-image-minimal-secure-boot.bbappend.disabled enabled by modifying file extension from .bbappend.disabled to .bbappend
+```console
+foo@bar:~/yocto/sources/meta-ecu-150a1/recipes-core/core-image$ mv core-image-minimal-secure-boot.bbappend.disabled core-image-minimal-secure-boot.bbappend
+```
+
+4. Add & setup the "security reference design" meta-layer to the yocto project.
 ```console
 foo@bar:~/yocto$ source ./setup-environment build
 foo@bar:~/yocto/build$ bitbake-layers add-layer ../sources/meta-nxp-reference-design/meta-secure-boot
-foo@bar:~/yocto/build$ vim ./conf/local.conf     #add    CST_PATH = "<absolute path to cst-3.4.0 folder>"  
+foo@bar:~/yocto/build$ vim ./conf/local.conf     #add    CST_PATH = "<absolute path to cst-3.4.0 folder>"
 ```
-4. Use one of the following commands to build the desired signed image:
+5. Use one of the following commands to build the desired signed image:
 ```console
 foo@bar:~/yocto/build$ bitbake core-image-minimal-secure-boot
 foo@bar:~/yocto/build$ bitbake imx-boot-signature                # for building a signed uboot only
