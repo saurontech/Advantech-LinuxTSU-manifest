@@ -414,6 +414,7 @@ foo@bar:~/yocto/build$ ls tmp/deploy/images/imx8mq-ecu150a1/*.raucb
 ```
 
 >[!Note]
+>__Creating a RAUC Bundle with SecureBoot__  
 >Make sure the parameter `RAUC_SLOT_rootfs` in `meta-ecu-150a1/recipes-core/bundles/update-bundle.bb` matches the rootfs image name. e.g. for `core-image-minimal-secure-boot-imx8mq-ecu150a1.rootfs.tar.gz`, set `RAUC_SLOT_rootfs = "core-image-minimal-secure-boot"`.
 
 ### Using RAUC on the Development Board
